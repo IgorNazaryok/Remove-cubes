@@ -1,0 +1,30 @@
+body
+{
+    margin: 10px;
+}
+
+.playingField
+{
+    border: 5px ridge #ccc;
+    border-radius: 5px;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    background: rgba(223,224,225, 0.7);
+    padding: 2px;
+}
+
+.btn
+{
+    width: 110px;
+}
+
+.rules_margin
+{
+    margin-top: 20px;
+}
+
+.card-body
+{
+    background: rgba(223,224,225, 0.8);
+    height: 250px;  
+}
