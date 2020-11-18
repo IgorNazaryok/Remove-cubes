@@ -27,8 +27,8 @@ const RemoveCubes = () =>{
   let totalPoints;
   let fieldSize=64;
   let extraTime=0;  
-  FillingResultsTable();
-  CreateGame(); 
+  FillingResultsTable(); 
+  CreateGame();  
 
   buttonStart.addEventListener('click', StartGame)
   buttonNewGame.addEventListener('click', NewGame)
@@ -40,7 +40,7 @@ const RemoveCubes = () =>{
       const allCubes = document.querySelectorAll('.js-cube');
       allCubes.forEach((cube)=>cube.remove());
     }
-    function CreateGame (levelGame='firstCreate')
+    function CreateGame (levelGame='firstLevel')
     {
       switch(levelGame)
       {
@@ -77,7 +77,7 @@ const RemoveCubes = () =>{
         document.querySelector('#points').innerText=GetCountPoints(el);
         el.target.style.background = el.target.style.border =colorsCube.color1;
       }
-      if (totalPoints>=50 && isFirstCreate)
+      if (totalPoints>=50 && isFirstLevel)
       {
         StartGame();  
         clearInterval(timerId);
@@ -159,17 +159,18 @@ const RemoveCubes = () =>{
     function GetListCube(fieldSize=64) {    
       const result = [];
       let newCube; 
-      document.documentElement.clientHeight<800 ? playingField.style.width = '510px': playingField.style.width = '600px';
+      playingField.style.width = '510px';
+      console.log(playingField.style.width);
       for(let i=1; i<=fieldSize; i++) {
         newCube = document.createElement('div');
         newCube.className = "js-cube";
-        newCube.style.height=newCube.style.width=(Math.floor(playingField.offsetWidth/(fieldSize**(1/2))))-(Math.floor(playingField.offsetWidth/(fieldSize**(1/2))))%10+1+'px' 
-        console.log(document.documentElement.clientHeight);
+        newCube.style.height=newCube.style.width=(Math.floor(playingField.offsetWidth/(fieldSize**(1/2))))-(Math.floor(playingField.offsetWidth/(fieldSize**(1/2))))%10+'px';
         newCube.id = `cube${i}`;
         result.push(newCube);
         newCube.addEventListener('dblclick', AddCube);
         newCube.addEventListener('click', AddCube); 
-      }    
+      }
+      console.log(newCube.style.height);    
       return result;
     }
     function Timer (n)
@@ -185,6 +186,7 @@ const RemoveCubes = () =>{
                         score.value=totalPoints;
                         buttonStart.innerText='START';
                         isRunGame = false;
+                        CreateGame('restart');
                         $('#saveModal').on('shown.bs.modal', function () {
                           $('#name').focus();
                         });
