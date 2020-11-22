@@ -43,6 +43,7 @@ In one minute, you need to remove as many cubes as possible.
 
 > ### Save game
  Localstorage is used to store the results.<br><br>
+![Save game](./image/6.png)
 ![Save game](./image/3.png)
 ![Save game](./image/4.png)
 
