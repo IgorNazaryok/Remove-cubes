@@ -160,7 +160,6 @@ const RemoveCubes = () =>{
       const result = [];
       let newCube; 
       playingField.style.width = '510px';
-      console.log(playingField.style.width);
       for(let i=1; i<=fieldSize; i++) {
         newCube = document.createElement('div');
         newCube.className = "js-cube";
@@ -170,7 +169,6 @@ const RemoveCubes = () =>{
         newCube.addEventListener('dblclick', AddCube);
         newCube.addEventListener('click', AddCube); 
       }
-      console.log(newCube.style.height);    
       return result;
     }
     function Timer (n)
