@@ -1,15 +1,16 @@
 $( document ).ready(function() {
 
   const RemoveCubes = () =>{
-    const playingField = $('#js-playingField'); 
-    const buttonStart = $('#start');
-    const buttonNewGame = $('#newGame');
-    const score = $('#score');
-    const userName = $('#name');
-    const buttonSave = $('#save');
-    const lastUser = $('#lastUser');
-    const errorName = $('#error');
-    const buttonContinue = $('#сontinue');
+    const $playingField = $('#js-playingField'); 
+    const $buttonStart = $('#start');
+    const $buttonNewGame = $('#newGame');
+    const $score = $('#score');
+    const $userName = $('#name');
+    const $buttonSave = $('#save');
+    const $lastUser = $('#lastUser');
+    const $buttonContinue = $('#сontinue');
+    const $points = $('#points');
+    const $time = $('#time');
 
 
     const colorsCube = {
@@ -30,24 +31,24 @@ $( document ).ready(function() {
     let fieldSize=64;
     let extraTime=0;  
     FillingResultsTable(); 
-    CreateGame();      
+    CreateGame();
 
-    buttonStart.on( "click", function( event ) {
+    $buttonStart.on( "click", function() {
       StartGame();
     });
-    buttonNewGame.on( "click", function( event ) { 
+    $buttonNewGame.on( "click", function() { 
       NewGame();
     });
-    buttonSave.on( "click", function( event ) {
+    $buttonSave.on( "click", function() {
       SaveResult();
     });
-    buttonContinue.on( "click", function( event ) {
+    $buttonContinue.on( "click", function() {
       ContinueGame();
     });
 
       function RemoveListCube ()
       {
-        playingField.find('.js-cube').remove();
+        $playingField.find('.js-cube').remove();
       }
 
       function CreateGame (levelGame='firstLevel')
@@ -56,25 +57,25 @@ $( document ).ready(function() {
         {
           case 'secondLevel':
             RemoveListCube();
-            playingField.append(...GetListCube(144));
+            $playingField.append(...GetListCube(144));
             fieldSize=144;          
             break;
           case 'restart':
             {
               RemoveListCube();
-              playingField.append(...GetListCube());
+              $playingField.append(...GetListCube());
               totalPoints=0;
-              $('#points').html(totalPoints);
-              $('#time').html(`01:00`);
+              $points.text(totalPoints);
+              $time.text(`01:00`);
               fieldSize=64; 
             }          
             break;
           default:
             {
-              playingField.append(...GetListCube());
+              $playingField.append(...GetListCube());
               totalPoints=0;
-              $('#points').html(totalPoints);
-              $('#time').html(`01:00`);            
+              $points.text(totalPoints);
+              $time.text(`01:00`);            
             }         
             break;
         }     
@@ -88,7 +89,7 @@ $( document ).ready(function() {
       { 
         if (isRunGame)
         {             
-        $('#points').html(GetCountPoints(el));
+        $points.text(GetCountPoints(el));
         el.css({
           background:colorsCube.none,
           border: colorsCube.none
@@ -176,8 +177,8 @@ $( document ).ready(function() {
       function GetListCube(fieldSize=64) {    
         const result = [];
         let newCube; 
-        playingField.css('width','510px');
-        const size =(Math.floor(+(playingField.css('width').slice(0, -2))/(fieldSize**(1/2))))-(Math.floor(+(playingField.css('width').slice(0, -2))/(fieldSize**(1/2))))%10+'px';
+        $playingField.css('width','510px');
+        const size =(Math.floor(+($playingField.css('width').slice(0, -2))/(fieldSize**(1/2))))-(Math.floor(+($playingField.css('width').slice(0, -2))/(fieldSize**(1/2))))%10+'px';
         for(let i=1; i<=fieldSize; i++) {      
           newCube = $("<div></div>")
           .addClass("js-cube")
@@ -185,11 +186,17 @@ $( document ).ready(function() {
             height: size,
             width: size
           })
-          .on( "dblclick", function( event ) {
+          .on( "dblclick", function() {
             AddCube();
           })
-          .on( "click", function( event ) {
+          .on( "click", function() {
             AddCube();
+          })
+          .on( "mouseenter", function() {
+            $(this).css('border-radius', '15%');
+          })
+          .on( "mouseleave", function() {
+            $(this).css('border-radius', '0')
           })
           .attr('id', `cube${i}`);
 
@@ -202,13 +209,13 @@ $( document ).ready(function() {
         timerId = setInterval(()=>{
                         --n;  
                         n>9 ? 
-                        $('#time').html(`00:${n}`):
-                        $('#time').html(`00:0${n}`); 
+                        $time.text(`00:${n}`):
+                        $time.text(`00:0${n}`); 
                         if (n==0)  
                         {
                           clearInterval(timerId);
-                          score.val(totalPoints);
-                          buttonStart.innerText='START';
+                          $score.val(totalPoints);
+                          $buttonStart.text('START');
                           isRunGame = false;
                           CreateGame('restart');
                           $('#saveModal').on('shown.bs.modal', function () {
@@ -240,14 +247,14 @@ $( document ).ready(function() {
             startTime = new Date();    
           }
           isRunGame=!isRunGame;
-          buttonStart.html('PAUSE');
+          $buttonStart.text('PAUSE');
         }
         else 
         {
           pauseTime = new Date();    
           clearInterval(timerId)
           isRunGame=!isRunGame;
-          buttonStart.html('START');
+          $buttonStart.text('START');
         }
       }
       function NewGame()
@@ -257,27 +264,27 @@ $( document ).ready(function() {
         isRunGame = false;
         clearInterval(timerId);
         CreateGame('restart');   
-        $('#points').html(totalPoints);
-        $('#time').html(`01:00`);
-        buttonStart.html('START');     
+        $points.text(totalPoints);
+        $time.text(`01:00`);
+        $buttonStart.text('START');     
       }  
       function SaveResult ()
       { 
-        if (userName.val())
+        if ($userName.val())
         {
         listResult.push(new Object({
-          name: userName.val(),
-          score: score.val()
+          name:  $userName.val(),
+          score: $score.val()
         }));  
         localStorage.listResult = JSON.stringify(listResult);      
-        AddResultToTable(userName.val(), score.val());
+        AddResultToTable($userName.val(), $score.val());
         $("#saveModal").modal('hide');
-        userName.val('');
-        errorName.val('');         
+         $userName.val('');
+         $userName.removeClass('is-invalid');    
         }
         else
         {
-          errorName.val('Please, enter you name');
+           $userName.addClass('is-invalid');
         }
       }
       function ContinueGame()
@@ -287,15 +294,15 @@ $( document ).ready(function() {
       }
 
       function AddResultToTable (userName, points)
-      {
-        let newResult = document.createElement('tr');
-        let columnName = document.createElement('td');
-        let columnResult = document.createElement('td');
-        columnName.innerText=userName;
-        columnResult.innerText=points;
+      {        
+        let newResult = $("<tr></tr>");
+        let columnName = $("<td></td>");
+        let columnResult = $("<td></td>");
+        columnName.text(userName);
+        columnResult.text(points);
         newResult.append(columnName);
         newResult.append(columnResult);
-        lastUser.after(newResult);
+        $lastUser.after(newResult);
       }
 
       function FillingResultsTable ()
@@ -320,24 +327,22 @@ $( document ).ready(function() {
             break;
 
           case colorsCube.red:
-
-            cube.dblclick(function() {
+            cube.on('dblclick',function() {
               RemoveCube($(this));
             })    
             break;
 
           case colorsCube.green:
-
-            cube.dblclick(function() {
+            cube.on('dblclick',function() {
               RemoveCube($(this));
-            })       
+            })      
             break;
 
           default:
-            cube.click(function() {
+            cube.on('click',function() {
               RemoveCube($(this));
             })
-            break;          
+            break;                   
         }
       }    
   }
